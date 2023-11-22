@@ -1,18 +1,21 @@
+const container = document.querySelector('.container');
 class pageLayout {
-
-    static container = document.querySelector('.container');
+    static appContainer = this.createAppContainer();
 
     static createPage() {
         const header = this.createHeader();
         const sidebar = this.createSidebar();
-        const appContainer = this.createAppContainer();
         const layoutContainer = document.createElement('div');
+        const addTaskBtn = this.createAddTaskButton();
         layoutContainer.classList.add('layout-container');
         layoutContainer.appendChild(sidebar);
-        layoutContainer.appendChild(appContainer);
+        this.appContainer.appendChild(addTaskBtn);
+        layoutContainer.appendChild(this.appContainer);
 
-        this.container.appendChild(header);
-        this.container.appendChild(layoutContainer);
+        container.appendChild(header);
+        container.appendChild(layoutContainer);
+
+        
     }
 
     static createHeader() {
@@ -102,6 +105,18 @@ class pageLayout {
         appContainer.classList.add('app-container');
 
         return appContainer;
+    }
+
+    static createAddTaskButton() {
+        const addTaskWrapper = document.createElement('div');
+        const taskButtonIcon = document.createElement('img');
+        const taskButtonText = document.createElement('p');
+        taskButtonIcon.src = "./assets/add-circle-outline.svg";
+        taskButtonText.textContent = "Adicionar tarefa";
+        addTaskWrapper.appendChild(taskButtonIcon);
+        addTaskWrapper.appendChild(taskButtonText);
+
+        return addTaskWrapper;
     }
 
 
