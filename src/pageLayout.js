@@ -1,5 +1,8 @@
+import addBtnIcon from "./assets/add-circle-outline.svg";
 const container = document.querySelector('.container');
-class pageLayout {
+
+let newTaskBtnActive = false;
+class PageLayout {
     static appContainer = this.createAppContainer();
 
     static createPage() {
@@ -14,9 +17,9 @@ class pageLayout {
 
         container.appendChild(header);
         container.appendChild(layoutContainer);
-
-        
     }
+
+
 
     static createHeader() {
         const header = document.createElement('header');
@@ -101,27 +104,80 @@ class pageLayout {
     }
 
     static createAppContainer() {
-        const appContainer = document.createElement('div');
-        appContainer.classList.add('app-container');
+        const appContainerModel = document.createElement('div');
+        appContainerModel.classList.add('app-container');
 
-        return appContainer;
+        return appContainerModel;
     }
 
     static createAddTaskButton() {
         const addTaskWrapper = document.createElement('div');
         const taskButtonIcon = document.createElement('img');
         const taskButtonText = document.createElement('p');
-        taskButtonIcon.src = "./assets/add-circle-outline.svg";
+        addTaskWrapper.classList.add('add-task-wrapper');
+        taskButtonIcon.addEventListener('click', () => {
+            this.addNewTask();
+        });
+        taskButtonIcon.classList.add('task-button-icon');
+        taskButtonText.classList.add('task-button-text');
+        taskButtonIcon.src = addBtnIcon;
         taskButtonText.textContent = "Adicionar tarefa";
         addTaskWrapper.appendChild(taskButtonIcon);
         addTaskWrapper.appendChild(taskButtonText);
 
+
         return addTaskWrapper;
     }
 
+    
+    static addNewTask() {
+        if(newTaskBtnActive) { return; }
+        const newTaskDiv = document.createElement('div');
+        const newTaskTitle =  document.createElement('p');
+        const newTaskTitleInput = document.createElement('input');
+        const newTaskDescription = document.createElement('p');
+        const newTaskDescriptionInput = document.createElement('input');
+        const newTaskDate = document.createElement('p');
+        const newTaskDateInput = document.createElement('input');
+        const newTaskButtonsDiv = document.createElement('div');
+        const newTaskAddButton = document.createElement('button');
+        const newTaskCancelButton = document.createElement('button');
+        newTaskDiv.classList.add('new-task-div');
+        newTaskTitle.classList.add('new-task-title');
+        newTaskTitleInput.classList.add('new-task-input');
+        newTaskDescription.classList.add('new-task-description');
+        newTaskDescriptionInput.classList.add('new-task-input');
+        newTaskDate.classList.add('new-task-date');
+        newTaskDateInput.classList.add('new-task-input');
+        newTaskButtonsDiv.classList.add('new-task-buttons-div');
+        newTaskAddButton.classList.add('new-task-add-button');
+        newTaskCancelButton.classList.add('new-task-cancel-button');
+
+        newTaskTitle.textContent = "Titulo:";
+        newTaskDescription.textContent = "Descrição:";
+        newTaskDate.textContent = "Data:";
+        newTaskAddButton.textContent = "Adicionar";
+        newTaskCancelButton.textContent = "Cancelar";
+
+        newTaskButtonsDiv.appendChild(newTaskAddButton);
+        newTaskButtonsDiv.appendChild(newTaskCancelButton);
+
+        newTaskDiv.appendChild(newTaskTitle);
+        newTaskDiv.appendChild(newTaskTitleInput);
+        newTaskDiv.appendChild(newTaskDescription);
+        newTaskDiv.appendChild(newTaskDescriptionInput);
+        newTaskDiv.appendChild(newTaskDate);
+        newTaskDiv.appendChild(newTaskDateInput);
+        newTaskDiv.appendChild(newTaskButtonsDiv);
+
+        const appContainerDom = document.querySelector('.app-container');
+        appContainerDom.appendChild(newTaskDiv);
+        newTaskBtnActive = true;
+
+    }
 
 }
 
 export {
-    pageLayout
+    PageLayout
 }
