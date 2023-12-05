@@ -1,13 +1,12 @@
 import { PageLayout } from "./pageLayout";
-import { Todo } from "./todo";
+
 import doneIcon from "./assets/checkmark-outline.svg";
 
-const container = document.querySelector('.container');
-const appContainer = PageLayout.appContainer;
+
 
 class TodoLayout {
-
     static createTodo(todo) {
+        const appContainer = document.querySelector('.app-container');
         const todoDiv = document.createElement('div');
         const todoTitle = document.createElement('p');
         const todoDescription = document.createElement('p');

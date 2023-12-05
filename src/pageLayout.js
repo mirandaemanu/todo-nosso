@@ -1,4 +1,7 @@
 import addBtnIcon from "./assets/add-circle-outline.svg";
+import { Todo } from "./todo";
+import { TodoLayout } from "./todoLayout";
+
 const container = document.querySelector('.container');
 
 let newTaskBtnActive = false;
@@ -145,10 +148,13 @@ class PageLayout {
         newTaskDiv.classList.add('new-task-div');
         newTaskTitle.classList.add('new-task-title');
         newTaskTitleInput.classList.add('new-task-input');
+        newTaskTitleInput.setAttribute('id', 'new-task-title-input');
         newTaskDescription.classList.add('new-task-description');
         newTaskDescriptionInput.classList.add('new-task-input');
+        newTaskDescriptionInput.setAttribute('id', 'new-task-description-input');
         newTaskDate.classList.add('new-task-date');
         newTaskDateInput.classList.add('new-task-input');
+        newTaskDateInput.setAttribute('id', 'new-task-date-input');
         newTaskButtonsDiv.classList.add('new-task-buttons-div');
         newTaskAddButton.classList.add('new-task-add-button');
         newTaskCancelButton.classList.add('new-task-cancel-button');
@@ -158,6 +164,13 @@ class PageLayout {
         newTaskDate.textContent = "Data:";
         newTaskAddButton.textContent = "Adicionar";
         newTaskCancelButton.textContent = "Cancelar";
+
+        newTaskCancelButton.addEventListener('click', () => this.closeAddTaskWindow());
+        newTaskAddButton.addEventListener('click', () => {
+            this.createNewTodo();
+            this.closeAddTaskWindow();
+            newTaskBtnActive = false;
+        })
 
         newTaskButtonsDiv.appendChild(newTaskAddButton);
         newTaskButtonsDiv.appendChild(newTaskCancelButton);
@@ -174,6 +187,23 @@ class PageLayout {
         appContainerDom.appendChild(newTaskDiv);
         newTaskBtnActive = true;
 
+    }
+
+    static createNewTodo() {
+        if(!newTaskBtnActive) { return; }
+        const taskName = document.querySelector('#new-task-title-input').value;
+        const taskDescription = document.querySelector('#new-task-description-input').value;
+        const taskDueDate = document.querySelector('#new-task-date-input').value;
+
+        const todo = new Todo(taskName, taskDescription, taskDueDate);
+        TodoLayout.createTodo(todo);
+    }
+
+    static closeAddTaskWindow() {
+        if(!newTaskBtnActive) { return; }
+        const newTaskBtn = document.querySelector('.new-task-div');
+        newTaskBtn.remove();
+        newTaskBtnActive = false;
     }
 
 }
