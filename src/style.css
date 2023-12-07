@@ -153,6 +153,14 @@ ul {
 .options-div {
     display: flex;
     align-items: center;
+    
     gap: 10px;
 }
 
+.required-input {
+    border: 1px solid red;
+}
+
+.dropdown-img {
+    height: 25px;
+}

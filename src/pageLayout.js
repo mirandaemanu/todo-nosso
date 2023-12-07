@@ -1,6 +1,7 @@
 import addBtnIcon from "./assets/add-circle-outline.svg";
 import { Todo } from "./todo";
 import { TodoLayout } from "./todoLayout";
+import { DateFormatter } from "./dateFormatter";
 
 const container = document.querySelector('.container');
 
@@ -135,7 +136,7 @@ class PageLayout {
     
     static addNewTask() {
         if(newTaskBtnActive) { return; }
-        const newTaskDiv = document.createElement('div');
+        const newTaskDiv = document.createElement('form');
         const newTaskTitle =  document.createElement('p');
         const newTaskTitleInput = document.createElement('input');
         const newTaskDescription = document.createElement('p');
@@ -143,20 +144,25 @@ class PageLayout {
         const newTaskDate = document.createElement('p');
         const newTaskDateInput = document.createElement('input');
         const newTaskButtonsDiv = document.createElement('div');
-        const newTaskAddButton = document.createElement('button');
+        const newTaskAddButton = document.createElement('input');
         const newTaskCancelButton = document.createElement('button');
         newTaskDiv.classList.add('new-task-div');
         newTaskTitle.classList.add('new-task-title');
         newTaskTitleInput.classList.add('new-task-input');
         newTaskTitleInput.setAttribute('id', 'new-task-title-input');
+        newTaskTitleInput.setAttribute('required', '');
         newTaskDescription.classList.add('new-task-description');
         newTaskDescriptionInput.classList.add('new-task-input');
         newTaskDescriptionInput.setAttribute('id', 'new-task-description-input');
         newTaskDate.classList.add('new-task-date');
         newTaskDateInput.classList.add('new-task-input');
         newTaskDateInput.setAttribute('id', 'new-task-date-input');
+        newTaskDateInput.setAttribute('min', DateFormatter.todayDateFormatted());
+        newTaskDateInput.type = 'date';
+        newTaskDateInput.onkeydown = 'return false';
         newTaskButtonsDiv.classList.add('new-task-buttons-div');
         newTaskAddButton.classList.add('new-task-add-button');
+        newTaskAddButton.setAttribute('type', 'submit');
         newTaskCancelButton.classList.add('new-task-cancel-button');
 
         newTaskTitle.textContent = "Titulo:";
@@ -166,7 +172,9 @@ class PageLayout {
         newTaskCancelButton.textContent = "Cancelar";
 
         newTaskCancelButton.addEventListener('click', () => this.closeAddTaskWindow());
-        newTaskAddButton.addEventListener('click', () => {
+        newTaskAddButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            if(!this.checkRequiredFields()) { return; }
             this.createNewTodo();
             this.closeAddTaskWindow();
             newTaskBtnActive = false;
@@ -189,14 +197,41 @@ class PageLayout {
 
     }
 
+    static checkRequiredFields() {
+        const taskName = document.querySelector('#new-task-title-input');
+        const taskDescription = document.querySelector('#new-task-description-input');
+        const taskDueDate = document.querySelector('#new-task-date-input');
+
+        if(taskName.value == '' || taskDescription.value == '' || taskDueDate.value == '') {
+            if (taskName.value == '') {
+                taskName.classList.add('required-input');
+            }
+
+            if(taskDescription.value == '') {
+                taskDescription.classList.add('required-input');
+            }
+
+            if(taskDueDate.value == '') {
+                taskDueDate.classList.add('required-input');
+            }
+
+
+            return false;
+        }
+
+        return true;
+    }
+
     static createNewTodo() {
         if(!newTaskBtnActive) { return; }
         const taskName = document.querySelector('#new-task-title-input').value;
         const taskDescription = document.querySelector('#new-task-description-input').value;
         const taskDueDate = document.querySelector('#new-task-date-input').value;
+        const taskDueDateFormatted = DateFormatter.convertDateFormat(taskDueDate);
 
-        const todo = new Todo(taskName, taskDescription, taskDueDate);
-        TodoLayout.createTodo(todo);
+        const todo = new Todo(taskName, taskDescription, taskDueDateFormatted);
+        const domTodo = TodoLayout.createTodo(todo);
+        this.appContainer.appendChild(domTodo);
     }
 
     static closeAddTaskWindow() {
@@ -204,6 +239,37 @@ class PageLayout {
         const newTaskBtn = document.querySelector('.new-task-div');
         newTaskBtn.remove();
         newTaskBtnActive = false;
+    }
+
+    static createDropdownMenu() {
+        const dropdownDiv = document.createElement('div');
+        const dropdownEditOption = document.createElement('p');
+        const dropdownDeleteOption = document.createElement('p');
+
+        dropdownDiv.classList.add('dropdown-div');
+        dropdownEditOption.classList.add('dropdown-edit-option');
+        dropdownDeleteOption.classList.add('dropdown-delete-option');
+
+        dropdownEditOption.textContent = "Editar";
+        dropdownDeleteOption.textContent = "Remover";
+
+        dropdownDeleteOption.addEventListener('click', (e) => this.removeTaskBtn(e.target));
+        dropdownEditOption.addEventListener('click', (e) => TodoLayout.editTodo(e));
+
+        dropdownDiv.appendChild(dropdownEditOption);
+        dropdownDiv.appendChild(dropdownDeleteOption);
+
+        return dropdownDiv;
+    }
+
+    static showDropdownOptions(event) {
+        const dropdownMenu = event.target.parentNode.querySelector('.dropdown-div');
+        (dropdownMenu.classList.contains('show-dropdown')) ? dropdownMenu.classList.remove('show-dropdown') : dropdownMenu.classList.add('show-dropdown');
+
+    }
+
+    static removeTaskBtn(node) {
+        node.parentNode.parentNode.parentNode.parentNode.remove();
     }
 
 }

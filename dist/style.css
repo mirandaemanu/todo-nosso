@@ -29,7 +29,7 @@ ul {
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     background-color: var(--main-bg-color);
     text-align: center;
-
+    z-index: 2;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -62,7 +62,6 @@ ul {
     height: 100%;
     width: 270px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 0px 8px;
-    z-index: -1;
     padding-top: 50px;
     background: white;
 
@@ -86,27 +85,39 @@ ul {
     flex: 3;
     background-color: var(--main-bg-color);
     padding: 50px 80px;
-    z-index: -1;
+    
 
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 5px;
     
 
 }
 
 .todo-div {
-    flex: 1;
+    
     border: 1px solid grey;
     max-height: 50px;
     width: 70%;
-    position: relative;
-    left: -130px;
+    
 
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 30px;
+}
+
+.todo-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.todo-info>* {
+    padding: 1px;
+    padding-left: 5px;
+    width: 200px;
 }
 
 .add-task-wrapper {
@@ -133,10 +144,17 @@ ul {
     width: 25px;
     border: 1px solid black;
     border-radius: 50%;
+    cursor: pointer;
     
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.todo-done-btn-completed {
+    background: #80ED99;
+    text-decoration: line-through;
+    color: grey;
 }
 
 .todo-done-btn:hover {
@@ -146,5 +164,53 @@ ul {
 .options-div {
     display: flex;
     align-items: center;
+    
     gap: 10px;
+}
+
+.required-input {
+    border: 1px solid red;
+}
+
+.dropdown-img {
+    height: 30px;
+}
+
+.dropdown-options {
+    height: 30px;
+    position: relative;
+}
+
+.dropdown-div {
+    display: none;
+    padding: 5px;
+    font-size: 15px;
+    position: absolute;
+    bottom: -40px;
+    left: 25px;
+    background-color: #f1f1f1;
+    width: 80px;
+    height: 50px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-div>* {
+    cursor: pointer;
+}
+
+.show-dropdown {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+}
+
+.dom-div {
+    flex: 1;
+    
+    width: 100%;
+
+    display: flex;
+    justify-content: space-between;
 }
